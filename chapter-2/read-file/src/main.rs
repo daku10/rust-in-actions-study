@@ -5,17 +5,10 @@ use std::{
 
 fn main() {
     let f = File::open("readme.md").unwrap();
-    let mut reader = BufReader::new(f);
-
-    let mut line = String::new();
-    loop {
-        let len = reader.read_line(&mut line).unwrap();
-        if len == 0 {
-            break;
-        }
-
-        println!("{} ({} bytes long)", line, len);
-
-        line.truncate(0);
+    let reader = BufReader::new(f);
+    // 微妙に更新。BufReader::lines()は各業の最後にある改行を除く
+    for line_ in reader.lines() {
+        let line = line_.unwrap();
+        println!("{} ({} bytes long)", line, line.len());
     }
 }
