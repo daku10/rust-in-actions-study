@@ -37,14 +37,17 @@ fn main() {
     let pattern = args.value_of("pattern").unwrap();
     let re = Regex::new(pattern).unwrap();
 
-    let input = args.value_of("input").unwrap_or("-");
-    if input == "-" {
-        let stdin = io::stdin();
-        let reader = stdin.lock();
-        process_lines(reader, re);
-    } else {
-        let f = File::open(input).unwrap();
-        let reader = BufReader::new(f);
-        process_lines(reader, re);
+    let input = args.value_of("input");
+    match input {
+        Some(val) => {
+            let f = File::open(val).unwrap();
+            let reader = BufReader::new(f);
+            process_lines(reader, re);
+        }
+        None => {
+            let stdin = io::stdin();
+            let reader = stdin.lock();
+            process_lines(reader, re);
+        }
     }
 }
