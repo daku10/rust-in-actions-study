@@ -9,6 +9,12 @@ pub struct File {
 
 impl File {
     /// 新規ファイルは空とみなすが、ファイル名は必須
+    ///
+    /// # 例
+    ///
+    /// ```
+    /// let f = File::new("f1.txt");
+    /// ```
     pub fn new(name: &str) -> File {
         File {
             name: String::from(name),
