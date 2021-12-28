@@ -1,15 +1,14 @@
-use std::collections::HashMap;
+use serde_json::json;
 
 fn main() {
-    let mut capitals = HashMap::new();
-
-    capitals.insert("Cook Islands", "Avarua");
-    capitals.insert("Fiji", "Suva");
-    capitals.insert("Kiribati", "South Tarawa");
-    capitals.insert("Niue", "Alofi");
-    capitals.insert("Tonga", "Nuku'alofa");
-    capitals.insert("Tuvalu", "Funafuti");
-
-    let tongan_capital = capitals["Tonga"];
+    let capitals = json!({
+        "Cook Islands": "Avarua",
+        "Fiji": "Suva",
+        "Kiribati": "South Tarawa",
+        "Niue": "Alofi",
+        "Tonga": "Niku'alofa",
+        "Tuvalu": "Funafuti"
+    });
+    let tongan_capital = &capitals["Tonga"];
     println!("Tongaの首都は: {}", tongan_capital);
 }
