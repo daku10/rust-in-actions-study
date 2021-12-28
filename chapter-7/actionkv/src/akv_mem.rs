@@ -1,3 +1,5 @@
+use libactionkv::ActionKV;
+
 #[cfg(target_os = "windows")]
 const USAGE: &str = "
 Usage:
@@ -41,7 +43,7 @@ fn main() {
 
         "update" => {
             let value = maybe_value.expect(&USAGE).as_ref();
-            store.udpate(key, value).unwrap();
+            store.update(key, value).unwrap();
         }
 
         _ => eprintln!("{}", &USAGE),
