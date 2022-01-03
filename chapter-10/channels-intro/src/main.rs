@@ -2,14 +2,34 @@ use std::thread;
 
 use crossbeam::{select, unbounded};
 
-fn main() {
-    let (tx, rx) = unbounded();
+#[derive(Debug)]
+enum ConnectivityCheck {
+    Ping,
+    Pong,
+    Pang,
+}
 
-    thread::spawn(move || {
-        tx.send(42).unwrap();
+fn main() {
+    let n_messages = 3;
+    let (requests_tx, requests_rx) = unbounded();
+    let (responses_tx, responses_rx) = unbounded();
+
+    thread::spawn(move || loop {
+        match requests_rx.recv().unwrap() {
+            ConnectivityCheck::Pong => eprintln!("unexpected pong response"),
+            ConnectivityCheck::Ping => responses_tx.send(ConnectivityCheck::Pong).unwrap(),
+            ConnectivityCheck::Pang => return,
+        }
     });
 
-    select! {
-        recv(rx) -> msg => println!("{:?}", msg)
+    for _ in 0..n_messages {
+        requests_tx.send(ConnectivityCheck::Ping).unwrap();
+    }
+    requests_tx.send(ConnectivityCheck::Pang).unwrap();
+
+    for _ in 0..n_messages {
+        select! {
+            recv(responses_rx) -> msg => println!("{:?}", msg),
+        }
     }
 }
