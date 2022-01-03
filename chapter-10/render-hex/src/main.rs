@@ -1,7 +1,6 @@
 use std::{env, thread};
 
 use crossbeam::unbounded;
-use rayon::prelude::*;
 
 use svg::{
     node::element::{
