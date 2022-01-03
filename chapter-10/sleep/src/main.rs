@@ -6,12 +6,18 @@ use std::{
 fn main() {
     let start = Instant::now();
 
-    let handler = thread::spawn(|| {
+    let handler1 = thread::spawn(|| {
         let pause = Duration::from_millis(300);
         thread::sleep(pause.clone())
     });
 
-    handler.join().unwrap();
+    let handler2 = thread::spawn(|| {
+        let pause = Duration::from_millis(300);
+        thread::sleep(pause);
+    });
+
+    handler1.join().unwrap();
+    handler2.join().unwrap();
 
     let finish = Instant::now();
 
